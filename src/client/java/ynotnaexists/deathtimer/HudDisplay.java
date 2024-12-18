@@ -4,13 +4,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import org.joml.Matrix4f;
-
-import static net.fabricmc.loader.impl.util.StringUtil.wrapLines;
 
 public class HudDisplay implements ClientModInitializer {
     private int timerTicks = 0; // Timer in ticks (20 ticks = 1 second)
@@ -18,7 +15,7 @@ public class HudDisplay implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Increment the timer every tick
-        HudRenderCallback.EVENT.register((Matrix4f matrices, float tickDelta, VertexConsumerProvider vertexConsumers) -> {
+        HudRenderCallback.EVENT.register((Matrix4f matrices) -> {
             timerTicks++;
 
             // Convert ticks to seconds
@@ -37,7 +34,7 @@ public class HudDisplay implements ClientModInitializer {
                         70,
                         70,
                         matrices,
-                        vertexConsumers,
+                        VertexConsumerProvider.immediate(new BufferAllocator(6)),
                         100
 
 
